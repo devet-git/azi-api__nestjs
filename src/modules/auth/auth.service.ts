@@ -5,6 +5,9 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { plainToClass } from 'class-transformer';
+import { UserDto } from '../user/dto/user.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,18 +25,17 @@ export class AuthService {
       return this.userService.addUser(userDto);
     }
   }
-  async login(account: LoginDto) {
-    const existUser = await this.userService.getUserByUsername(
-      account.username,
-    );
-    if (
-      existUser &&
-      (await this.comparehashedPassword(account.password, existUser.password))
-    ) {
+  async login(account: LoginDto): Promise<LoginResponseDto> {
+    const existUser = await this.userService.getUserByUsername(account.username);
+    if (existUser && (await this.comparehashedPassword(account.password, existUser.password))) {
       return {
         accessToken: this.jwtService.sign({ username: account.username }),
-      };
+        user: plainToClass(UserDto, existUser, {
+          excludeExtraneousValues: true,
+        }),
+      } as LoginResponseDto;
     }
+
     throw new UnauthorizedException();
   }
 
@@ -43,10 +45,7 @@ export class AuthService {
     return hash;
   }
 
-  private async comparehashedPassword(
-    password: string,
-    hashedPassword: string,
-  ) {
+  private async comparehashedPassword(password: string, hashedPassword: string) {
     return bcrypt.compareSync(password, hashedPassword);
   }
 }

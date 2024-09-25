@@ -2,16 +2,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.schema';
 import { UserService } from './user.service';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -32,10 +23,7 @@ export class UserController {
   }
 
   @Put(':id')
-  updateUserById(
-    @Param('id') id: string,
-    @Body() user: UpdateUserDto,
-  ): Promise<User> {
+  updateUserById(@Param('id') id: string, @Body() user: UpdateUserDto): Promise<User> {
     return this.userService.updateUserById(id, user);
   }
 
