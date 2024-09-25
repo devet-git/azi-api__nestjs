@@ -4,13 +4,16 @@ import { User, UserDocument } from './user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async getAllUser(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async getAllUser(): Promise<UserDto[]> {
+    const users = await this.userModel.find().exec();
+    return plainToClass(UserDto, users, { excludeExtraneousValues: true });
   }
 
   async getUserById(id: string): Promise<User> {
