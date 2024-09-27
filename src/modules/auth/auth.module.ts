@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserService } from '../user/user.service';
-import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from 'src/core/jwt.strategy';
+import { UserModule } from '../user/user.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
     JwtModule.register({
       secret: 'abcutyyxx__sass123adf',
       signOptions: {
-        expiresIn: '10m',
+        expiresIn: '20m',
       },
     }),
     UserModule,

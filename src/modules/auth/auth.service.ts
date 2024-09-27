@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
@@ -17,35 +17,43 @@ export class AuthService {
   ) {}
 
   async register(account: RegisterDto) {
-    if (account.confirmPassword === account.password) {
-      const userDto = new CreateUserDto();
-      userDto.password = await this.hashPassword(account.password);
-      userDto.username = account.username;
+    const existedUser = await this.userService.getUserByUsername(account.username);
 
-      return this.userService.addUser(userDto);
-    }
+    if (existedUser) throw new BadRequestException('Account already exist');
+
+    if (account.confirmPassword != account.password) throw new BadRequestException('Password not match');
+
+    const userDto = new CreateUserDto();
+    userDto.password = await this.hashPassword(account.password);
+    userDto.username = account.username;
+
+    return this.userService.addUser(userDto);
   }
+
   async login(account: LoginDto): Promise<LoginResponseDto> {
-    const existUser = await this.userService.getUserByUsername(account.username);
-    if (existUser && (await this.comparehashedPassword(account.password, existUser.password))) {
+    const existedUser = await this.userService.getUserByUsername(account.username);
+    const isPwMatch = await this.compareHashedPassword(account.password, existedUser.password);
+
+    if (existedUser && isPwMatch) {
       return {
-        accessToken: this.jwtService.sign({ username: account.username }),
-        user: plainToClass(UserDto, existUser, {
+        accessToken: this.jwtService.sign({ username: account.username, id: existedUser.id }),
+        user: plainToClass(UserDto, existedUser, {
           excludeExtraneousValues: true,
         }),
       } as LoginResponseDto;
     }
 
-    throw new UnauthorizedException();
+    throw new BadRequestException('Account does not exist');
   }
 
   private async hashPassword(password: string) {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
+
     return hash;
   }
 
-  private async comparehashedPassword(password: string, hashedPassword: string) {
+  private async compareHashedPassword(password: string, hashedPassword: string) {
     return bcrypt.compareSync(password, hashedPassword);
   }
 }

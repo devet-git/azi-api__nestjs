@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -13,27 +13,36 @@ export class UserService {
 
   async getAllUser(): Promise<UserDto[]> {
     const users = await this.userModel.find().exec();
-    return plainToClass(UserDto, users, { excludeExtraneousValues: true });
+    return users.map((user) => plainToInstance(UserDto, user.toObject()));
   }
 
-  async getUserById(id: string): Promise<User> {
-    return this.userModel.findById(id);
+  async getUserById(id: string): Promise<UserDto> {
+    const user = await this.userModel.findById(id).exec();
+    return plainToInstance(UserDto, user.toObject());
   }
 
-  async getUserByUsername(username: string): Promise<User> {
-    return this.userModel.findOne({ username: username }).exec();
+  async getUserDtoByUsername(username: string): Promise<UserDto> {
+    const user = await this.userModel.findOne({ username: username }).exec();
+    return plainToInstance(UserDto, user.toObject());
   }
 
-  async addUser(user: CreateUserDto): Promise<User> {
+  async getUserByUsername(username: string): Promise<UserDocument> {
+    return await this.userModel.findOne({ username: username }).exec();
+  }
+
+  async addUser(user: CreateUserDto): Promise<UserDto> {
     const createdUser = new this.userModel(user);
-    return createdUser.save();
+    const saved = await createdUser.save();
+    return plainToInstance(UserDto, saved.toObject());
   }
 
-  async updateUserById(id: string, user: UpdateUserDto): Promise<User> {
-    return this.userModel.findByIdAndUpdate(id, user, { new: true }).exec();
+  async updateUserById(id: string, user: UpdateUserDto): Promise<UserDto> {
+    const updated = await this.userModel.findByIdAndUpdate(id, user, { new: true }).exec();
+    return plainToInstance(UserDto, updated.toObject());
   }
 
-  async deleteUserById(id: string): Promise<User> {
-    return this.userModel.findByIdAndDelete(id).exec();
+  async deleteUserById(id: string): Promise<UserDto> {
+    const deleted = await this.userModel.findByIdAndDelete(id).exec();
+    return plainToInstance(UserDto, deleted.toObject());
   }
 }
