@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+
+export enum Priority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high', // Sửa lỗi chính tả từ 'hight' thành 'high'
+}
 
 export class CardBaseDto {
   @ApiProperty()
@@ -15,9 +21,18 @@ export class CardBaseDto {
   @IsString()
   description: string;
 
+  @ApiProperty({ enum: Priority })
+  @IsEnum(Priority)
+  priority: Priority;
+
   @ApiProperty()
   @IsNumber()
   position: number;
+
+  @ApiProperty()
+  @IsArray()
+  @IsOptional()
+  image_urls: string[];
 
   @ApiProperty()
   @IsOptional()

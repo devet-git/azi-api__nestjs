@@ -17,6 +17,12 @@ export class Card {
   @Prop()
   position: number;
 
+  @Prop()
+  image_urls: string[];
+
+  @Prop({ default: 'low', enum: ['low', 'medium', 'high'] })
+  priority: 'low' | 'medium' | 'hight';
+
   @Prop({ default: Date.now })
   createdAt: Date;
 
