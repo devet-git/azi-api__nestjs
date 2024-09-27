@@ -4,13 +4,13 @@ import { HydratedDocument } from 'mongoose';
 export type ProjectDocument = HydratedDocument<Project>;
 @Schema()
 export class Project {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
   @Prop()
-  description: string;
+  description?: string;
 
-  @Prop()
+  @Prop({ required: true })
   created_by: string;
 
   @Prop({ default: Date.now })

@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
     JwtModule.register({
       secret: 'abcutyyxx__sass123adf',
       signOptions: {
-        expiresIn: '20m',
+        expiresIn: '10m',
       },
     }),
     UserModule,
