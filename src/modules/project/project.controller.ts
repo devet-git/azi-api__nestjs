@@ -32,10 +32,10 @@ export class ProjectController {
     return this.projectService.createProjectByCurrentUser(user, data);
   }
 
-  @Put()
-  async updateProject(@Request() req: any, @Body() data: UpdateProjectDto): Promise<ProjectDto> {
+  @Put(':id')
+  async updateProject(@Request() req: any, @Param('id') id: string, @Body() data: UpdateProjectDto): Promise<ProjectDto> {
     const user: UserDocument = req.user;
-    return this.projectService.updateProjectByCurrentUser(user, data);
+    return this.projectService.updateProjectByCurrentUser(user, id, data);
   }
 
   @Delete(':id')

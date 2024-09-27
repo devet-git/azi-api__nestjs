@@ -28,8 +28,7 @@ export class ProjectService {
       { name: 'IN PROGRESS', projectId: saved.id, position: 2 },
       { name: 'DONE', projectId: saved.id, position: 3 },
     ];
-    const createLists = await this.listService.createManyByProjectId(listsData);
-    console.log(createLists);
+    await this.listService.createManyByProjectId(listsData);
 
     return plainToInstance(ProjectDto, saved.toObject());
   }
@@ -39,16 +38,19 @@ export class ProjectService {
 
     return existedProject.map((prj) => plainToInstance(ProjectDto, prj.toObject()));
   }
+
   async getProjectById(id: string) {
     const existedProject = await this.projectModel.findById(id).exec();
     const lists = await this.listService.getByProjectId(id);
+
     let result = plainToInstance(ProjectDetailDto, existedProject.toObject());
     result.lists = lists;
+
     return result;
   }
 
-  async updateProjectByCurrentUser(user: UserDocument, data: UpdateProjectDto) {
-    const updated = await this.projectModel.findOneAndUpdate({ created_by: user.id, _id: data.id }, data, { new: true }).exec();
+  async updateProjectByCurrentUser(user: UserDocument, id: string, data: UpdateProjectDto) {
+    const updated = await this.projectModel.findOneAndUpdate({ created_by: user.id, _id: id }, data, { new: true }).exec();
 
     if (!updated) throw new BadRequestException('Project does not exist');
 

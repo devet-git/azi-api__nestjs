@@ -5,7 +5,7 @@ import { HydratedDocument } from 'mongoose';
 export type ListDocument = HydratedDocument<List>;
 @Schema()
 export class List {
-  @Prop({ required: true })
+  @Prop({ required: true, ref: 'Project' })
   projectId: string;
 
   @Prop()
@@ -19,6 +19,9 @@ export class List {
 
   @Prop({ default: Date.now })
   updatedAt: Date;
+
+  @Prop([{ type: String, ref: 'Card' }])
+  cardIds: string[];
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

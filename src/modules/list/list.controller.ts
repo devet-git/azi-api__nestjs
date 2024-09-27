@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/guard/jwt.guard';
 import { ListService } from './list.service';
@@ -8,7 +8,7 @@ import { UpdateListDto } from './dto/update-list.dto';
 @ApiTags('List')
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
-@Controller('list')
+@Controller('lists')
 export class ListController {
   constructor(private readonly listService: ListService) {}
 
@@ -18,12 +18,12 @@ export class ListController {
   }
 
   @Post()
-  async createListByProjectId(data: CreateListDto) {
+  async createListByProjectId(@Body() data: CreateListDto) {
     return this.listService.createByProjectId(data);
   }
 
   @Put()
-  async updateListByProjectId(data: UpdateListDto) {
+  async updateListByProjectId(@Body() data: UpdateListDto) {
     return this.listService.createByProjectId(data);
   }
 

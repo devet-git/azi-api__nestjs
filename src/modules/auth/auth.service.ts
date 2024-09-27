@@ -32,18 +32,17 @@ export class AuthService {
 
   async login(account: LoginDto): Promise<LoginResponseDto> {
     const existedUser = await this.userService.getUserByUsername(account.username);
+    if (!existedUser) throw new BadRequestException('Account does not exist');
     const isPwMatch = await this.compareHashedPassword(account.password, existedUser.password);
 
-    if (existedUser && isPwMatch) {
-      return {
-        accessToken: this.jwtService.sign({ username: account.username, id: existedUser.id }),
-        user: plainToClass(UserDto, existedUser, {
-          excludeExtraneousValues: true,
-        }),
-      } as LoginResponseDto;
-    }
+    if (!isPwMatch) throw new BadRequestException('Account does not exist');
 
-    throw new BadRequestException('Account does not exist');
+    return {
+      accessToken: this.jwtService.sign({ username: account.username, id: existedUser.id }),
+      user: plainToClass(UserDto, existedUser, {
+        excludeExtraneousValues: true,
+      }),
+    } as LoginResponseDto;
   }
 
   private async hashPassword(password: string) {
