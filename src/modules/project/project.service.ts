@@ -1,16 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Project, ProjectDocument } from './project.schema';
-import { Model } from 'mongoose';
-import { CreateProjectDto } from './dto/create-project.dto';
 import { plainToInstance } from 'class-transformer';
-import { ProjectDto } from './dto/project.dto';
-import { UserDocument } from '../user/user.schema';
-import { UpdateProjectDto } from './dto/update-project.dto';
-import { List } from '../list/list.schema';
-import { ListService } from '../list/list.service';
+import { Model } from 'mongoose';
 import { CreateListDto } from '../list/dto/create-list.dto';
+import { ListService } from '../list/list.service';
+import { UserDocument } from '../user/user.schema';
+import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectDetailDto } from './dto/project-detail.dto';
+import { ProjectDto } from './dto/project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
+import { Project, ProjectDocument } from './project.schema';
 
 @Injectable()
 export class ProjectService {

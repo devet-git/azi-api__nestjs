@@ -8,6 +8,7 @@ import { ListModule } from './modules/list/list.module';
 import { CardModule } from './modules/card/card.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserRoleModule } from './modules/user-role/user-role.module';
+import { PermissionModule } from './modules/permission/permission.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserRoleModule } from './modules/user-role/user-role.module';
     CardModule,
     RoleModule,
     UserRoleModule,
+    PermissionModule,
   ],
 })
 export class AppModule {}

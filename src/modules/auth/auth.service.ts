@@ -5,7 +5,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { UserDto } from '../user/dto/user.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 
@@ -39,9 +39,7 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign({ username: account.username, id: existedUser.id }),
-      user: plainToClass(UserDto, existedUser, {
-        excludeExtraneousValues: true,
-      }),
+      user: plainToInstance(UserDto, existedUser.toObject()),
     } as LoginResponseDto;
   }
 
