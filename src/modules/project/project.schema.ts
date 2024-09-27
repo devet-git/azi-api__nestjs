@@ -14,10 +14,10 @@ export class Project {
   created_by: string;
 
   @Prop({ default: Date.now })
-  created_at: string;
+  created_at: Date;
 
   @Prop({ default: Date.now })
-  updated_at: string;
+  updated_at: Date;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
