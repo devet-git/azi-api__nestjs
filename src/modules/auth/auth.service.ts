@@ -33,7 +33,7 @@ export class AuthService {
   async login(account: LoginDto): Promise<LoginResponseDto> {
     const existedUser = await this.userService.getUserByUsername(account.username);
     if (!existedUser) throw new BadRequestException('Account does not exist');
-    const isPwMatch = await this.compareHashedPassword(account.password, existedUser.password);
+    const isPwMatch = await this.isPasswordMatched(account.password, existedUser.password);
 
     if (!isPwMatch) throw new BadRequestException('Account does not exist');
 
@@ -52,7 +52,7 @@ export class AuthService {
     return hash;
   }
 
-  private async compareHashedPassword(password: string, hashedPassword: string) {
+  private async isPasswordMatched(password: string, hashedPassword: string) {
     return bcrypt.compareSync(password, hashedPassword);
   }
 }

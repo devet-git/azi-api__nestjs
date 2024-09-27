@@ -13,7 +13,6 @@ export class ListService {
 
   async getByProjectId(projectId: string) {
     const lists = await this.listModel.find({ projectId: projectId }).populate('cardIds').exec();
-    console.log(lists);
 
     return lists.map((l) => plainToInstance(ListDto, l.toObject()));
   }

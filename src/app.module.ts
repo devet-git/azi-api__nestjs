@@ -6,6 +6,8 @@ import { UserModule } from './modules/user/user.module';
 import { ProjectModule } from './modules/project/project.module';
 import { ListModule } from './modules/list/list.module';
 import { CardModule } from './modules/card/card.module';
+import { RoleModule } from './modules/role/role.module';
+import { UserRoleModule } from './modules/user-role/user-role.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { CardModule } from './modules/card/card.module';
     ProjectModule,
     ListModule,
     CardModule,
+    RoleModule,
+    UserRoleModule,
   ],
 })
 export class AppModule {}

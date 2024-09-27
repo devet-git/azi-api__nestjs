@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SuccessResponseInterceptor } from './interceptors/success-response.interceptor';
-import { configCors } from './config/cors.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,18 +25,13 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       transform: true,
       exceptionFactory: (errors) => {
-        return new BadRequestException(
-          errors.map(
-            (err) =>
-              `${err.property}: ${Object.values(err.constraints).join(', ')}`,
-          ),
-        );
+        return new BadRequestException(errors.map((err) => `${err.property}: ${Object.values(err.constraints).join(', ')}`));
       },
     }),
   );
 
   app.useGlobalInterceptors(new SuccessResponseInterceptor());
-  // app.setGlobalPrefix('api');
+
   app.enableCors({
     origin: ['http://192.168.188.70:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

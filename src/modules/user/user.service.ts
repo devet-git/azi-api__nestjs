@@ -6,10 +6,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { plainToInstance } from 'class-transformer';
+import { UserRoleService } from '../user-role/user-role.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly userRoleService: UserRoleService,
+  ) {}
 
   async getAllUser(): Promise<UserDto[]> {
     const users = await this.userModel.find().exec();
@@ -33,6 +37,9 @@ export class UserService {
   async addUser(user: CreateUserDto): Promise<UserDto> {
     const createdUser = new this.userModel(user);
     const saved = await createdUser.save();
+
+    this.userRoleService.addtoUserRole(saved.id);
+
     return plainToInstance(UserDto, saved.toObject());
   }
 
