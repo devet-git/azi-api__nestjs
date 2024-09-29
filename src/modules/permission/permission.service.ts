@@ -29,4 +29,18 @@ export class PermissionService {
   async delete(id: string): Promise<Permission> {
     return this.permissionModel.findByIdAndDelete(id).exec();
   }
+
+  async getProjectAdminId(): Promise<string> {
+    const permission = await this.permissionModel.findOne({ name: 'project_admin' });
+    return permission.id;
+  }
+  async getViewerId(): Promise<string> {
+    const permission = await this.permissionModel.findOne({ name: 'viewer' });
+    return permission.id;
+  }
+
+  async getPermissionIdByName(name: string) {
+    const permission = await this.permissionModel.findOne({ name });
+    return permission.id;
+  }
 }

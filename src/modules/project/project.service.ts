@@ -10,26 +10,30 @@ import { ProjectDetailDto } from './dto/project-detail.dto';
 import { ProjectDto } from './dto/project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project, ProjectDocument } from './project.schema';
+import { ProjectMemberService } from '../project-member/project-member.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
     private readonly listService: ListService,
+    private readonly projectMemberService: ProjectMemberService,
   ) {}
 
   async createProjectByCurrentUser(user: UserDocument, data: CreateProjectDto): Promise<ProjectDto> {
     const newProject = new this.projectModel(data);
     newProject.created_by = user.id;
-    const saved = await newProject.save();
+    const savedProject = await newProject.save();
     const listsData: CreateListDto[] = [
-      { name: 'TO DO', projectId: saved.id, position: 1 },
-      { name: 'IN PROGRESS', projectId: saved.id, position: 2 },
-      { name: 'DONE', projectId: saved.id, position: 3 },
+      { name: 'TO DO', projectId: savedProject.id, position: 1 },
+      { name: 'IN PROGRESS', projectId: savedProject.id, position: 2 },
+      { name: 'DONE', projectId: savedProject.id, position: 3 },
     ];
-    await this.listService.createManyByProjectId(listsData);
 
-    return plainToInstance(ProjectDto, saved.toObject());
+    await this.listService.createManyByProjectId(listsData);
+    await this.projectMemberService.setUserAsProjectAdmin(user.id, savedProject.id);
+
+    return plainToInstance(ProjectDto, savedProject.toObject());
   }
 
   async getProjectByCurrentUser(user: UserDocument) {
