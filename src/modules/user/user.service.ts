@@ -16,7 +16,7 @@ export class UserService {
   ) {}
 
   async getAllUser(): Promise<UserDto[]> {
-    const users = await this.userModel.find().exec();
+    const users = await this.userModel.find({ $or: [{ deleted: false }, { deleted: { $exists: false } }] }).exec();
     return users.map((user) => plainToInstance(UserDto, user.toObject()));
   }
 
@@ -51,5 +51,15 @@ export class UserService {
   async deleteUserById(id: string): Promise<UserDto> {
     const deleted = await this.userModel.findByIdAndDelete(id).exec();
     return plainToInstance(UserDto, deleted.toObject());
+  }
+
+  async markUserAsDeleted(id: string): Promise<UserDto> {
+    const deleted = await this.userModel.findByIdAndUpdate(id, { deleted: true }, { new: true }).exec();
+    return plainToInstance(UserDto, deleted.toObject());
+  }
+
+  async findUsersNotInArray(userIds: string[]) {
+    const users = await this.userModel.find({ _id: { $nin: userIds } }).exec();
+    return users.map((u) => plainToInstance(UserDto, u.toObject()));
   }
 }
