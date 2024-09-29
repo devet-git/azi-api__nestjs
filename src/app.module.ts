@@ -4,6 +4,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { ProjectModule } from './modules/project/project.module';
+import { ListModule } from './modules/list/list.module';
+import { CardModule } from './modules/card/card.module';
+import { RoleModule } from './modules/role/role.module';
+import { UserRoleModule } from './modules/user-role/user-role.module';
+import { PermissionModule } from './modules/permission/permission.module';
+import { ProjectMemberModule } from './modules/project-member/project-member.module';
 
 @Module({
   imports: [
@@ -20,6 +26,12 @@ import { ProjectModule } from './modules/project/project.module';
     AuthModule,
     UserModule,
     ProjectModule,
+    ListModule,
+    CardModule,
+    RoleModule,
+    UserRoleModule,
+    PermissionModule,
+    ProjectMemberModule,
   ],
 })
 export class AppModule {}

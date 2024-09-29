@@ -5,7 +5,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { UserDto } from '../user/dto/user.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 
@@ -32,18 +32,15 @@ export class AuthService {
 
   async login(account: LoginDto): Promise<LoginResponseDto> {
     const existedUser = await this.userService.getUserByUsername(account.username);
-    const isPwMatch = await this.compareHashedPassword(account.password, existedUser.password);
+    if (!existedUser) throw new BadRequestException('Account does not exist');
+    const isPwMatch = await this.isPasswordMatched(account.password, existedUser.password);
 
-    if (existedUser && isPwMatch) {
-      return {
-        accessToken: this.jwtService.sign({ username: account.username, id: existedUser.id }),
-        user: plainToClass(UserDto, existedUser, {
-          excludeExtraneousValues: true,
-        }),
-      } as LoginResponseDto;
-    }
+    if (!isPwMatch) throw new BadRequestException('Account does not exist');
 
-    throw new BadRequestException('Account does not exist');
+    return {
+      accessToken: this.jwtService.sign({ username: account.username, id: existedUser.id }),
+      user: plainToInstance(UserDto, existedUser.toObject()),
+    } as LoginResponseDto;
   }
 
   private async hashPassword(password: string) {
@@ -53,7 +50,7 @@ export class AuthService {
     return hash;
   }
 
-  private async compareHashedPassword(password: string, hashedPassword: string) {
+  private async isPasswordMatched(password: string, hashedPassword: string) {
     return bcrypt.compareSync(password, hashedPassword);
   }
 }

@@ -10,7 +10,7 @@ import { UserDto } from './dto/user.dto';
 @ApiTags('User')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
