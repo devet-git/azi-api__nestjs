@@ -7,6 +7,12 @@ export enum Priority {
   HIGH = 'high', // Sửa lỗi chính tả từ 'hight' thành 'high'
 }
 
+export enum IssueType {
+  TASK = 'task',
+  BUG = 'bug',
+  story = 'story',
+}
+
 export class CardBaseDto {
   @ApiProperty()
   @IsString()
@@ -25,6 +31,10 @@ export class CardBaseDto {
   @IsEnum(Priority)
   priority: Priority;
 
+  @ApiProperty({ enum: IssueType })
+  @IsEnum(IssueType)
+  issueType: IssueType;
+
   @ApiProperty()
   @IsNumber()
   position: number;
@@ -37,9 +47,4 @@ export class CardBaseDto {
   @ApiProperty()
   @IsOptional()
   dueDate: Date;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsArray()
-  assignedUserIds: string[] | [];
 }

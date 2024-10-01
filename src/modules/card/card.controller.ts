@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/guard/jwt.guard';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
+import { CurrentUser } from 'src/decorator/current-user.decorator';
+import { CurrentUserDto } from '../auth/dto/current-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('Card')
@@ -17,12 +19,18 @@ export class CardController {
   //   return this.cardService.getCardsByListId(listId);
   // }
   @Post()
-  async createCard(@Body() data: CreateCardDto) {
-    return this.cardService.createCardByListId(data);
+  async createCard(@CurrentUser() user: CurrentUserDto, @Body() data: CreateCardDto) {
+    return this.cardService.createCardByListId(user, data);
   }
   @Put(':id')
   async updateCard(@Param('id') id: string, @Body() data: UpdateCardDto) {
     return this.cardService.updateCardById(id, data);
+  }
+
+  @ApiOperation({ summary: 'Move the card to the new list' })
+  @Put(':id/lists/:listId')
+  async moveToList(@Param('id') id: string, @Param('listId') listId: string) {
+    return this.cardService.moveCardFromList(id, listId);
   }
   @Delete(':id')
   async delete(@Param('id') id: string) {

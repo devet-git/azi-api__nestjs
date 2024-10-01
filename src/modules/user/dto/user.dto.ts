@@ -10,9 +10,6 @@ export class UserDto {
   @Expose()
   username: string;
 
-  @Exclude()
-  password: string;
-
   @Expose()
   avatar_url: string;
 

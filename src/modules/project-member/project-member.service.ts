@@ -69,7 +69,6 @@ export class ProjectMemberService {
   async getNoneProjectMembers(projectId: string) {
     const projectMember = await this.projectMemberModel.find({ projectId }).exec();
     const memberIds: string[] = projectMember.map((mem) => mem.userId);
-    console.log(memberIds);
 
     return await this.UserService.findUsersNotInArray(memberIds);
   }

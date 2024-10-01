@@ -23,6 +23,9 @@ export class Card {
   @Prop({ default: 'low', enum: ['low', 'medium', 'high'] })
   priority: 'low' | 'medium' | 'hight';
 
+  @Prop({ required: true, enum: ['task', 'bug', 'story'] })
+  issueType: 'task' | 'bug' | 'story';
+
   @Prop({ default: Date.now })
   createdAt: Date;
 
@@ -32,8 +35,11 @@ export class Card {
   @Prop()
   dueDate: Date;
 
-  @Prop()
-  assignedUserIds: string[];
+  @Prop({ ref: 'User' })
+  assignee: string;
+
+  @Prop({ ref: 'User' })
+  reporter: string;
 }
 
 export const CardSchema = SchemaFactory.createForClass(Card);

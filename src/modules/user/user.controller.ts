@@ -27,7 +27,7 @@ export class UserController {
     return this.userService.addUser(user);
   }
 
-  @AllowRoles(Role.Admin)
+  // @AllowRoles(Role.Admin)
   @Put(':id')
   updateUserById(@Param('id') id: string, @Body() user: UpdateUserDto): Promise<UserDto> {
     return this.userService.updateUserById(id, user);
