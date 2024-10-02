@@ -10,6 +10,7 @@ import { PermissionService } from '../permission/permission.service';
 import { UserDto } from '../user/dto/user.dto';
 import { UpdateMemberPermissionDto } from './dto/update-member-permission.dto';
 import { User, UserDocument } from '../user/user.schema';
+import { ProjectDto } from '../project/dto/project.dto';
 
 @Injectable()
 export class ProjectMemberService {
@@ -71,5 +72,10 @@ export class ProjectMemberService {
     const memberIds: string[] = projectMember.map((mem) => mem.userId);
 
     return await this.UserService.findUsersNotInArray(memberIds);
+  }
+
+  async getProjectIdsUserJoined(userId: string) {
+    const res = await this.projectMemberModel.find({ userId }).exec();
+    return res.map((r) => r.projectId);
   }
 }

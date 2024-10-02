@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
@@ -37,7 +37,8 @@ export class ProjectService {
   }
 
   async getProjectByCurrentUser(user: CurrentUserDto) {
-    const existedProject = await this.projectModel.find({ created_by: user.userId }).exec();
+    const projectIdsJoined = await this.projectMemberService.getProjectIdsUserJoined(user.userId);
+    const existedProject = await this.projectModel.find({ _id: { $in: projectIdsJoined } }).exec();
 
     return existedProject.map((prj) => plainToInstance(ProjectDto, prj.toObject()));
   }
@@ -62,7 +63,7 @@ export class ProjectService {
 
   async deleteProjectByCurrentUser(user: CurrentUserDto, id: string) {
     const deleted = await this.projectModel.findOneAndDelete({ created_by: user.userId, _id: id }).exec();
-
+    if (!deleted) throw new ForbiddenException('Access denied');
     return plainToInstance(ProjectDto, deleted.toObject());
   }
 }
