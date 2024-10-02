@@ -12,7 +12,24 @@ export class ListService {
   constructor(@InjectModel(List.name) private listModel: Model<ListDocument>) {}
 
   async getByProjectId(projectId: string) {
-    const lists = await this.listModel.find({ projectId: projectId }).populate('cardIds').exec();
+    const lists = await this.listModel
+      .find({ projectId: projectId })
+      .populate({
+        path: 'cardIds',
+        populate: [
+          {
+            path: 'assignee',
+            model: 'User',
+            select: '-password',
+          },
+          {
+            path: 'reporter',
+            model: 'User',
+            select: '-password',
+          },
+        ],
+      })
+      .exec();
 
     return lists.map((l) => plainToInstance(ListDto, l.toObject()));
   }
@@ -43,6 +60,14 @@ export class ListService {
   }
 
   async addCardId(listId: string, cardId: string) {
-    await this.listModel.findByIdAndUpdate(listId, { $push: { cardIds: cardId } }, { new: true });
+    await this.listModel.findOneAndUpdate(
+      { _id: listId, cardIds: { $ne: cardId } }, // Check if cardId does not exist
+      { $push: { cardIds: cardId } }, // Add cardId if it doesn't exist
+      { new: true },
+    );
+  }
+
+  async removeCardId(listId: string, cardId: string) {
+    await this.listModel.findByIdAndUpdate(listId, { $pull: { cardIds: cardId } }, { new: true });
   }
 }

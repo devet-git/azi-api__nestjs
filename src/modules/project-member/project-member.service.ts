@@ -1,3 +1,4 @@
+import { UserService } from 'src/modules/user/user.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProjectMember, ProjectMemberDocument } from './project-member.schema';
@@ -8,21 +9,25 @@ import { ProjectMemberDto } from './dto/project-member.dto';
 import { PermissionService } from '../permission/permission.service';
 import { UserDto } from '../user/dto/user.dto';
 import { UpdateMemberPermissionDto } from './dto/update-member-permission.dto';
+import { User, UserDocument } from '../user/user.schema';
 
 @Injectable()
 export class ProjectMemberService {
   constructor(
     @InjectModel(ProjectMember.name) private projectMemberModel: Model<ProjectMemberDocument>,
     private readonly permissionService: PermissionService,
+    private readonly UserService: UserService,
   ) {}
 
   async getAllMemberInProject(projectId: string) {
     const records = await this.projectMemberModel.find({ projectId }).populate('permissionIds').populate('userId').exec();
-    return records.map((re) => {
-      let dto = plainToInstance(ProjectMemberDto, re.toObject());
-      dto.user = plainToInstance(UserDto, dto.user);
-      return dto;
-    });
+    return records
+      .map((re) => {
+        let dto = plainToInstance(ProjectMemberDto, re.toObject());
+        dto.user = plainToInstance(UserDto, dto.user);
+        return dto;
+      })
+      .filter((re) => re.user !== null);
   }
 
   async addMemberToProject(projectId: String, data: AddMemberToProjectDto) {
@@ -59,5 +64,12 @@ export class ProjectMemberService {
     });
 
     projectAdmin.save();
+  }
+
+  async getNoneProjectMembers(projectId: string) {
+    const projectMember = await this.projectMemberModel.find({ projectId }).exec();
+    const memberIds: string[] = projectMember.map((mem) => mem.userId);
+
+    return await this.UserService.findUsersNotInArray(memberIds);
   }
 }

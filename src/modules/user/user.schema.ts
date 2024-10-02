@@ -15,9 +15,6 @@ export class User {
   name: string;
 
   @Prop()
-  role: string;
-
-  @Prop()
   password: string;
 
   @Prop()
@@ -25,6 +22,9 @@ export class User {
 
   @Prop()
   avatar_url: string;
+
+  @Prop({ default: false })
+  deleted: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

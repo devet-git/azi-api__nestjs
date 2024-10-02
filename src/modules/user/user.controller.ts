@@ -1,36 +1,41 @@
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AllowRoles } from 'src/decorator/allow-roles.decorator';
+import { JwtGuard } from 'src/guard/jwt.guard';
+import { Role, RoleGuard } from 'src/guard/role.guard';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './user.schema';
-import { UserService } from './user.service';
-import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { UserDto } from './dto/user.dto';
+import { UserService } from './user.service';
 
 @ApiTags('User')
 @ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtGuard, RoleGuard)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @AllowRoles(Role.Admin, Role.User)
   @Get()
-  getAllUser(@Request() req: any): Promise<UserDto[]> {
+  getAllUser(): Promise<UserDto[]> {
     return this.userService.getAllUser();
   }
 
+  @AllowRoles(Role.Admin)
   @Post()
-  createUser(@Body() user: CreateUserDto): Promise<User> {
+  createUser(@Body() user: CreateUserDto): Promise<UserDto> {
     return this.userService.addUser(user);
   }
 
+  // @AllowRoles(Role.Admin)
   @Put(':id')
-  updateUserById(@Param('id') id: string, @Body() user: UpdateUserDto): Promise<User> {
+  updateUserById(@Param('id') id: string, @Body() user: UpdateUserDto): Promise<UserDto> {
     return this.userService.updateUserById(id, user);
   }
 
+  @AllowRoles(Role.Admin)
   @Delete(':id')
-  deleteUserById(@Param('id') id: string): Promise<User> {
+  deleteUserById(@Param('id') id: string): Promise<UserDto> {
     return this.userService.deleteUserById(id);
   }
 }
