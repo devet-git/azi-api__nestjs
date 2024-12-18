@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { CurrentUserDto } from 'src/modules/auth/dto/current-user.dto';
+import { CurrentUserDto } from '../modules/auth/dto/current-user.dto';
 
 @Injectable()
 export class AnonymousGuard implements CanActivate {

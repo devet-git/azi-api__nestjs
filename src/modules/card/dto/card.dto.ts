@@ -1,4 +1,4 @@
-import { UserDto } from 'src/modules/user/dto/user.dto';
+import { UserDto } from '../../../modules/user/dto/user.dto';
 import { CardBaseDto } from './card-base.dto';
 import { Expose, Type } from 'class-transformer';
 

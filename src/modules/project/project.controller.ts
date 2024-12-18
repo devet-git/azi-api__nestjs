@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtGuard } from 'src/guard/jwt.guard';
+import { JwtGuard } from '../../guard/jwt.guard';
 import { CurrentUserDto } from '../auth/dto/current-user.dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectDto } from './dto/project.dto';

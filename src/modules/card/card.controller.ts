@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtGuard } from 'src/guard/jwt.guard';
+import { JwtGuard } from '../../guard/jwt.guard';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
-import { CurrentUser } from 'src/decorator/current-user.decorator';
+import { CurrentUser } from '../../decorator/current-user.decorator';
 import { CurrentUserDto } from '../auth/dto/current-user.dto';
 
 @ApiBearerAuth()

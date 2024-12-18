@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { Injectable } from '@nestjs/common';
-import { ProjectMemberService } from 'src/modules/project-member/project-member.service';
+import { ProjectMemberService } from '../../../modules/project-member/project-member.service';
 
 @Injectable()
 export class NotificationService {

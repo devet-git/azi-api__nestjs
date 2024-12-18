@@ -1,6 +1,6 @@
 import { Controller, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtGuard } from 'src/guard/jwt.guard';
+import { JwtGuard } from '../../guard/jwt.guard';
 
 @ApiTags('User role')
 @ApiBearerAuth()

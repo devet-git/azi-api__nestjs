@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SuccessResponseInterceptor } from './interceptors/success-response.interceptor';
+import 'tsconfig-paths/register';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -33,7 +34,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SuccessResponseInterceptor());
 
   app.enableCors({
-    origin: ['http://192.168.188.70:3000', 'http://localhost:3000'],
+    origin: ['http://192.168.188.70:3000', 'http://localhost:3000', 'https://azi-management-system.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     // allowedHeaders: 'Content-Type, Accept, Authorization',
@@ -41,6 +42,6 @@ async function bootstrap() {
     optionsSuccessStatus: 204,
   });
 
-  await app.listen(5555);
+  await app.listen(process.env.PORT || 5555);
 }
 bootstrap();

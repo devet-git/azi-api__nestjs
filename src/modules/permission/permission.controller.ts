@@ -2,7 +2,7 @@ import { Controller, Post, Body, Get, Param, Delete, UseGuards } from '@nestjs/c
 import { PermissionService } from './permission.service';
 import { Permission } from './permission.schema';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtGuard } from 'src/guard/jwt.guard';
+import { JwtGuard } from '../../guard/jwt.guard';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 
 @ApiTags('Project Permission')

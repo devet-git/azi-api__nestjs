@@ -1,7 +1,7 @@
 import { UpdateMemberPermissionDto } from './dto/update-member-permission.dto';
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtGuard } from 'src/guard/jwt.guard';
+import { JwtGuard } from '../../guard/jwt.guard';
 import { ProjectMemberService } from './project-member.service';
 import { AddMemberToProjectDto } from './dto/add-member.dto';
 

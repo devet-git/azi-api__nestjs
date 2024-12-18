@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { CurrentUserDto } from 'src/modules/auth/dto/current-user.dto';
+import { CurrentUserDto } from '../modules/auth/dto/current-user.dto';
 
 @Injectable()
 export class RoleGuard implements CanActivate {

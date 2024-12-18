@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from 'src/core/jwt.strategy';
+import { JwtStrategy } from '../../strategy/jwt.strategy';
 import { UserRoleModule } from '../user-role/user-role.module';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';

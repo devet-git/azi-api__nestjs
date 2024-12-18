@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { CurrentUserDto } from 'src/modules/auth/dto/current-user.dto';
+import { CurrentUserDto } from '../modules/auth/dto/current-user.dto';
 
 export const CurrentUser = createParamDecorator((data, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();

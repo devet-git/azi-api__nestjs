@@ -1,4 +1,4 @@
-import { ListDto } from 'src/modules/list/dto/list.dto';
+import { ListDto } from '../../../modules/list/dto/list.dto';
 
 export class ProjectDetailDto {
   id: string;

@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Permission } from 'src/modules/permission/permission.schema';
-import { UserDto } from 'src/modules/user/dto/user.dto';
+import { Permission } from '../../../modules/permission/permission.schema';
+import { UserDto } from '../../../modules/user/dto/user.dto';
 
 export class ProjectMemberDto {
   @Exclude()

@@ -1,4 +1,4 @@
-import { UserService } from 'src/modules/user/user.service';
+import { UserService } from '../../modules/user/user.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProjectMember, ProjectMemberDocument } from './project-member.schema';

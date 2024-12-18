@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { CardDto } from 'src/modules/card/dto/card.dto';
+import { CardDto } from '../../../modules/card/dto/card.dto';
 
 export class ListDto {
   @Expose()
