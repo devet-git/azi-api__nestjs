@@ -10,6 +10,7 @@ import { ProjectModule } from './modules/project/project.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserRoleModule } from './modules/user-role/user-role.module';
 import { UserModule } from './modules/user/user.module';
+import { NotificationModule } from './modules/websocket/notification/notification.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserModule } from './modules/user/user.module';
     UserRoleModule,
     PermissionModule,
     ProjectMemberModule,
+    NotificationModule,
   ],
   providers: [
     // Order of guards is very important

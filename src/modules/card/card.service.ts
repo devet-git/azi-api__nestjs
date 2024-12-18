@@ -29,7 +29,7 @@ export class CardService {
     return plainToInstance(CardDto, created.toObject());
   }
   async updateCardById(id: string, data: UpdateCardDto) {
-    const updated = await this.cardModel.findByIdAndUpdate(id, { ...data, updatedAt: Date.now }, { new: true }).exec();
+    const updated = await this.cardModel.findByIdAndUpdate(id, { ...data, updatedAt: Date.now() }, { new: true }).exec();
 
     return plainToInstance(CardDto, updated.toObject());
   }
